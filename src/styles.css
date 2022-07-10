@@ -2,3 +2,33 @@
   font-family: sans-serif;
   text-align: center;
 }
+
+.rowContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.box {
+  width: 40px;
+  height: 40px;
+  border: 1px solid black;
+  margin: 2px;
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+}
+
+.correct {
+  background-color: lightgreen;
+}
+
+.close {
+  background-color: wheat;
+}
+
+.wrong {
+  background-color: lightslategrey;
+}

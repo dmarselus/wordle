@@ -7,11 +7,7 @@ export default function App() {
   const [solution, setSolution] = useState("");
   const [guesses, setGuesses] = useState(new Array(6).fill(null));
   const [currentGuess, setCurrentGuess] = useState("");
-  // const [guesses, setGuesses] = useState(['asdasd']);
-
-  function check() {
-    console.log("todo");
-  }
+  const [isFinal, setIsFinal] = useState(-1);
 
   useEffect(() => {
     const handleType = (event) => {
@@ -20,9 +16,15 @@ export default function App() {
         console.log({ currentGuess });
         setCurrentGuess(currentGuess.slice(0, -1));
         return;
-      } else if (event.key === "Enter") {
-        console.log("2");
-        check();
+      } else if (event.key === "Enter" && currentGuess.length === 5) {
+        let currIndex = isFinal + 1;
+        let tempGuesses = [...guesses];
+        tempGuesses[currIndex] = currentGuess;
+
+        setGuesses(tempGuesses);
+        setIsFinal(currIndex);
+        setCurrentGuess("");
+        setIsFinal(isFinal + 1);
         return;
       } else if (currentGuess.length < 6 && event.key.match(/^[A-Za-z]+$/)) {
         console.log("3");
@@ -64,13 +66,14 @@ export default function App() {
       <h1>Hello CodeSandboxsss</h1>
       <h2>{solution}</h2>
       <h2>{currentGuess}</h2>
-      <h2>{guesses.length}</h2>
+      <h2>{isFinal}</h2>
       {guesses.map((item, index) => {
         let isCurrIndex = index === guesses.indexOf(null);
         return (
           <Row
             keyProp={index}
             guess={isCurrIndex ? currentGuess : item ?? ""}
+            isFinal={isFinal}
           />
         );
       })}
@@ -78,36 +81,21 @@ export default function App() {
   );
 }
 
-function Row({ guess, keyProp }) {
+function Row({ guess, keyProp, isFinal }) {
   let box = [];
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 5; i++) {
     box.push(guess[i] ?? "");
+
+    if (isFinal) {
+    }
   }
-  // console.log(box);
 
   return (
-    <div
-      key={keyProp}
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center"
-      }}
-    >
+    <div key={keyProp} className="rowContainer">
       {box.map((word, index) => {
         return (
-          <div
-            key={index}
-            style={{
-              display: "flex",
-              margin: 5,
-              padding: 25,
-              borderWidth: 1,
-              borderColor: "black",
-              background: "red"
-            }}
-          >
+          <div key={index} className="box correct">
             {word}
           </div>
         );
