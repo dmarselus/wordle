@@ -5,7 +5,7 @@ const API_URL = "https://api.frontendexpert.io/api/fe/wordle-words";
 
 export default function App() {
   const [solution, setSolution] = useState("");
-  const [guesses, setGuesses] = useState(new Array(1).fill(null));
+  const [guesses, setGuesses] = useState(new Array(6).fill(null));
   const [currentGuess, setCurrentGuess] = useState("");
   // const [guesses, setGuesses] = useState(['asdasd']);
 
@@ -16,17 +16,23 @@ export default function App() {
   useEffect(() => {
     const handleType = (event) => {
       if (event.key === "Backspace") {
+        console.log({ currentGuess });
         setCurrentGuess(currentGuess.slice(0, -1));
+        return;
       } else if (event.key === "Enter") {
+        console.log("2");
         check();
-      } else {
-        setCurrentGuess((oldGuess) => oldGuess + event.key);
+        return;
       }
+      // event.key.match(/^[A-Za-z]+$/)
+      console.log("3");
+      setCurrentGuess((oldGuess) => oldGuess + event.key);
+      return;
     };
 
     window.addEventListener("keydown", handleType);
     return () => window.removeEventListener("keydown", handleType);
-  }, []);
+  }, [currentGuess]);
 
   async function fetchNewSolution() {
     try {
@@ -77,7 +83,7 @@ function Row({ guess, keyProp }) {
   for (let i = 0; i < 6; i++) {
     box.push(guess[i] ?? "");
   }
-  console.log(box);
+  // console.log(box);
 
   return (
     <div
