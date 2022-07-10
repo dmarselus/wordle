@@ -15,6 +15,7 @@ export default function App() {
 
   useEffect(() => {
     const handleType = (event) => {
+      console.log(event.keycode);
       if (event.key === "Backspace") {
         console.log({ currentGuess });
         setCurrentGuess(currentGuess.slice(0, -1));
@@ -23,11 +24,11 @@ export default function App() {
         console.log("2");
         check();
         return;
+      } else if (currentGuess.length < 6 && event.key.match(/^[A-Za-z]+$/)) {
+        console.log("3");
+        setCurrentGuess((oldGuess) => oldGuess + event.key[0]);
+        return;
       }
-      // event.key.match(/^[A-Za-z]+$/)
-      console.log("3");
-      setCurrentGuess((oldGuess) => oldGuess + event.key);
-      return;
     };
 
     window.addEventListener("keydown", handleType);
