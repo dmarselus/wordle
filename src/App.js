@@ -5,7 +5,28 @@ const API_URL = "https://api.frontendexpert.io/api/fe/wordle-words";
 
 export default function App() {
   const [solution, setSolution] = useState("");
-  const [guesses, setGuesses] = useState(new Array(6).fill(null));
+  const [guesses, setGuesses] = useState(new Array(1).fill(null));
+  const [currentGuess, setCurrentGuess] = useState("");
+  // const [guesses, setGuesses] = useState(['asdasd']);
+
+  function check() {
+    console.log("todo");
+  }
+
+  useEffect(() => {
+    const handleType = (event) => {
+      if (event.key === "Backspace") {
+        setCurrentGuess(currentGuess.slice(0, -1));
+      } else if (event.key === "Enter") {
+        check();
+      } else {
+        setCurrentGuess((oldGuess) => oldGuess + event.key);
+      }
+    };
+
+    window.addEventListener("keydown", handleType);
+    return () => window.removeEventListener("keydown", handleType);
+  }, []);
 
   async function fetchNewSolution() {
     try {
@@ -35,14 +56,55 @@ export default function App() {
     <div className="App">
       <h1>Hello CodeSandboxsss</h1>
       <h2>{solution}</h2>
+      <h2>{currentGuess}</h2>
       <h2>{guesses.length}</h2>
-      {guesses.map((item) => (
-        <Row guess={item ?? ""} />
-      ))}
+      {guesses.map((item, index) => {
+        let isCurrIndex = index === guesses.indexOf(null);
+        return (
+          <Row
+            keyProp={index}
+            guess={isCurrIndex ? currentGuess : item ?? ""}
+          />
+        );
+      })}
     </div>
   );
 }
 
-function Row({ guess }) {
-  return <h1>{guess}</h1>;
+function Row({ guess, keyProp }) {
+  let box = [];
+
+  for (let i = 0; i < 6; i++) {
+    box.push(guess[i] ?? "");
+  }
+  console.log(box);
+
+  return (
+    <div
+      key={keyProp}
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center"
+      }}
+    >
+      {box.map((word, index) => {
+        return (
+          <div
+            key={index}
+            style={{
+              display: "flex",
+              margin: 5,
+              padding: 25,
+              borderWidth: 1,
+              borderColor: "black",
+              background: "red"
+            }}
+          >
+            {word}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
